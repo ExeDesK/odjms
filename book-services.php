@@ -1,22 +1,34 @@
 <?php
+include('includes/dbconnection.php');
 session_start();
 error_reporting(0);
-include('includes/dbconnection.php');
 
-    if(isset($_POST['submit']))
-  {
-  	$bid=$_GET['bookid'];
-  	
- $name=$_POST['name'];
-  $mobnum=$_POST['mobnum'];
- $email=$_POST['email'];
- $edate=$_POST['edate'];
- $est=$_POST['est'];
-  $eetime=$_POST['eetime'];
- $vaddress=$_POST['vaddress'];
- $eventtype=$_POST['eventtype'];
- $addinfo=$_POST['addinfo'];
- $bookingid=mt_rand(100000000, 999999999);
+////////////////////////////////////////////////
+//PARTIE MODIFIÉE DU CODE POUR PROTECTION XSS///
+////////////////////////////////////////////////
+
+// Fonction protégeant les entrées utilisateur avant insert bdd
+function antixss($input) {
+	return htmlspecialchars(strip_tags($input), ENT_QUOTES);
+}
+
+if(isset($_POST['submit']))
+{
+	$bid=antixss($_GET['bookid']);
+	$name=antixss($_POST['name']);
+	$mobnum=antixss($_POST['mobnum']);
+	$email=antixss($_POST['email']);
+	$edate=antixss($_POST['edate']);
+	$est=antixss($_POST['est']);
+	$eetime=antixss($_POST['eetime']);
+	$vaddress=antixss($_POST['vaddress']);
+	$eventtype=antixss($_POST['eventtype']);
+	$addinfo=antixss($_POST['addinfo']);
+	$bookingid=mt_rand(100000000, 999999999);
+////////////////////////////////////////////////
+
+
+
 $sql="insert into tblbooking(BookingID,ServiceID,Name,MobileNumber,Email,EventDate,EventStartingtime,EventEndingtime,VenueAddress,EventType,AdditionalInformation)values(:bookingid,:bid,:name,:mobnum,:email,:edate,:est,:eetime,:vaddress,:eventtype,:addinfo)";
 $query=$dbh->prepare($sql);
 $query->bindParam(':bookingid',$bookingid,PDO::PARAM_STR);
