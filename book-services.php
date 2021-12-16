@@ -9,6 +9,9 @@ error_reporting(0);
 
 // Fonction protégeant les entrées utilisateur avant insert bdd
 function antixss($input) {
+	//htmlspecialchars — Convertit les caractères spéciaux en entités HTML
+	//ENT_QUOTES 	Convertit les guillemets doubles et les guillemets simples.
+	//strip_tags — Supprime les balises HTML et PHP d'une chaîne
 	return htmlspecialchars(strip_tags($input), ENT_QUOTES);
 }
 
